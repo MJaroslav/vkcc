@@ -13,7 +13,8 @@ LOCALE_EN = {
     "button.ok.title": "Ok",
     "button.form.MAIN.login.title": "Login",
     "button.form.MAIN.settings.title": "Settings",
-    "button.from.LOGIN.login_new.title": "New user",
+    "button.form.LOGIN.login_new.title": "New user",
+    "button.form.LOGIN.login.title": "Login",
 
     "titletext.form.LOGIN_NEW.login.title": "Login",
     "titletext.popup.TWO_AUTH.code.title": "Code",
@@ -21,7 +22,12 @@ LOCALE_EN = {
     "titlepassword.form.LOGIN_NEW.password.title": "Password",
 
     "checkbox.form.LOGIN_NEW.remember.title": "Remember me",
-    "checkbox.popup.TWO_AUTH.remember.title": "Remember device"
+    "checkbox.popup.TWO_AUTH.remember.title": "Remember device",
+
+    "img.form.LOGIN.avatar.title": "Login as",
+    "img.no.title": "Error",
+
+    "box.form.LOGIN.accounts.title": "Select user"
 }
 
 
@@ -38,7 +44,8 @@ LOCALE_RU = {
     "button.ok.title": "Готово",
     "button.form.MAIN.login.title": "Войти",
     "button.form.MAIN.settings.title": "Настройки",
-    "button.from.LOGIN.login_new.title": "Новый пользователь",
+    "button.form.LOGIN.login_new.title": "Новый пользователь",
+    "button.form.LOGIN.login.title": "Войти",
 
     "titletext.form.LOGIN_NEW.login.title": "Логин",
     "titletext.popup.TWO_AUTH.code.title": "Код",
@@ -46,7 +53,12 @@ LOCALE_RU = {
     "titlepassword.form.LOGIN_NEW.password.title": "Пароль",
 
     "checkbox.form.LOGIN_NEW.remember.title": "Запомнить меня",
-    "checkbox.popup.TWO_AUTH.remember.title": "Запомнить устройство"
+    "checkbox.popup.TWO_AUTH.remember.title": "Запомнить устройство",
+
+    "img.form.LOGIN.avatar.title": "Войти как",
+    "img.no.title": "Ошибка",
+
+    "box.form.LOGIN.accounts.title": "Выберете пользователя"
 }
 LOCALES = {
     "english": LOCALE_EN,

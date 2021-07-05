@@ -1,6 +1,7 @@
 from vk_api import VkApi
 from vkcc.settings import SETTINGS
 import os
+import shutil
 import requests
 
 
@@ -15,6 +16,17 @@ class VkWrapper(object):
         self.__photo_cache_dir__ = os.path.expanduser("~/.cache/vkcc/")
         if not os.path.exists(self.__photo_cache_dir__):
             os.makedirs(self.__photo_cache_dir__)
+
+    def clear_cache(self):
+        for filename in os.listdir(self.__photo_cache_dir__):
+            file_path = os.path.join(self.__photo_cache_dir__, filename)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print("Failed to delete %s. Reason: %s".format(file_path, e))
 
     def login_by_token(self, account):
         self.__session__ = VkApi(token=account["access_token"], config_filename=self.__vk_api_config_file_name__)
@@ -37,6 +49,7 @@ class VkWrapper(object):
             self.__user_name__ = self.__user__["first_name"] + " " + self.__user__["last_name"]
             if save:
                 SETTINGS.add_account(self.__user_id__, self.__user_name__, self.__session__.token["access_token"])
+                self.get_avatar(self.__user_id__, "large")
                 return {
                     "name": self.__user_name__,
                     "access_token": self.__session__.token["access_token"],

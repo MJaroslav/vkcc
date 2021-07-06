@@ -1,7 +1,9 @@
+import json
 import subprocess
 import shlex
 import re
 import os
+import sys
 from vkcc.settings import SETTINGS
 
 
@@ -34,10 +36,46 @@ def __find_w3mimgdisplay__():
 # W3MIMGDISPLAY_PROCESS = __run_w3mimgdisplay_process__()
 
 
+def __make_ueberzug_process__():
+    return subprocess.Popen(shlex.split("ueberzug layer --silent"), stdin=subprocess.PIPE, stdout=subprocess.PIPE, universal_newlines=True)
+
+
+UEBERZUG_PROCESS = __make_ueberzug_process__()
+
+
+def draw_ueberzug(img, x, y, w, h, key):
+    global UEBERZUG_PROCESS
+    if not img:
+        return
+    if x < 0 or y < 0:
+        # _, _, ww, wh = get_window_size()
+        ww, wh = get_window_size()
+        if x < 0:
+            x = ww - w + x
+        if y < 0:
+            y = wh - h + y
+    ox, oy = SETTINGS.get_images_offset()
+    command = {
+        "identifier": "1",
+        "x": int(x + ox),
+        "y": int(y + oy),
+        "max_width": w,
+        "max_height": h,
+        "path": img,
+        "action": "add"
+    }
+    command = json.dumps(command) + "\n"
+    #print(command)
+    UEBERZUG_PROCESS.stdin.write(command)
+    UEBERZUG_PROCESS.stdin.flush()
+    # UEBERZUG_PROCESS.stdout.readline()
+
 # TODO: Make different render types
 def draw_image(img, x, y, w, h, cx=-1, cy=-1, cw=-1, ch=-1):
     if not img:
         return  # TUI don't work normally if try render no image
+    draw_ueberzug(img, x, y, w, h, None)
+    return
     command = __find_w3mimgdisplay__()
     # if W3MIMGDISPLAY_PROCESS:
     if command:

@@ -35,6 +35,7 @@ class VkWrapper(object):
             self.__user__ = self.__api__.users.get(fields="domain")[0]
             self.__user_id__ = self.__user__["id"]
             self.__user_name__ = self.__user__["first_name"] + " " + self.__user__["last_name"]
+            self.get_avatar(self.__user_id__, "large", True)
             return True
         else:
             return False
@@ -49,7 +50,7 @@ class VkWrapper(object):
             self.__user_name__ = self.__user__["first_name"] + " " + self.__user__["last_name"]
             if save:
                 SETTINGS.add_account(self.__user_id__, self.__user_name__, self.__session__.token["access_token"])
-                self.get_avatar(self.__user_id__, "large")
+                self.get_avatar(self.__user_id__, "large", True)
                 return {
                     "name": self.__user_name__,
                     "access_token": self.__session__.token["access_token"],

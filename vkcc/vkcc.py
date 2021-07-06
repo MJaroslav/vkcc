@@ -1,13 +1,21 @@
+APP = None
+
+
 import npyscreen as nps
+from pip.utils.packaging import get_metadata
+import os
 import vkcc.utils as utils
 import vkcc.localization as l10n
 from vkcc.vk import VK
 from vkcc.settings import SETTINGS
 import curses
+from vkcc.img import get_render_method
 
 
 class App(nps.StandardApp):
     def onStart(self):
+        global APP
+        APP = self
         nps.setTheme(nps.Themes.TransparentThemeLightText)
         self.addForm("MAIN", MainForm, name=l10n.translate("form.MAIN.title"))
         self.addForm("LOGIN_NEW", LoginNewForm, name=l10n.translate("form.LOGIN_NEW.title"))
@@ -87,9 +95,14 @@ class ImageWidget(nps.wgwidget.Widget):
         self.autohide = autohide
         self.border = border
         self.errored = False
+        self.img_changed = keywords["img_changed"] if "img_changed" in keywords else self.__img_changed__
+
+    def __img_changed__(self):
+        self.update()
 
     def set_img(self, img, errored=False):
         self.errored = errored
+        old = self.__img__
         self.__img__ = img
         if self.autohide:
             self.hidden = not self.__img__
@@ -100,14 +113,15 @@ class ImageWidget(nps.wgwidget.Widget):
                 self.name = l10n.translate("img.no.title")
             else:
                 self.name = self.__saved_name__
-        self.update()
+        if old != img:
+            self.img_changed()
 
     def clear(self, usechar=' '):
         super().clear('X')
         self.parent.refresh()
         super().clear(usechar)
         if self.border and not self.hidden:
-            draw_border_with_title(self)
+             draw_border_with_title(self)
         # x = self.relx
         # y = self.rely
         # w = self.width
@@ -115,13 +129,6 @@ class ImageWidget(nps.wgwidget.Widget):
         # x, y = utils.scale_by_char(x, y)
         # w, h = utils.scale_by_char(w, h)
         # utils.clear_image(x, y, w, h)
-
-    def display(self):
-        super().display()
-        if self.hidden:
-            self.__clear_image__()
-        else:
-            self.__draw_image__()
 
     def __draw_image__(self):
         x = self.relx
@@ -133,18 +140,48 @@ class ImageWidget(nps.wgwidget.Widget):
             y += 1
             w -= 2
             h -= 2
-        x, y = utils.scale_by_char(x, y)
-        w, h = utils.scale_by_char(w, h)
+        # x, y = utils.scale_by_char(x, y)
+        # w, h = utils.scale_by_char(w, h)
         draw_border_with_title(self)
-        utils.draw_image(self.__img__, x, y, w, h)
+        if x < 0 or y < 0:
+            # _, _, ww, wh = get_window_size()
+            ww, wh = os.get_terminal_size()
+            if x < 0:
+                x = ww - w + x
+            if y < 0:
+                y = wh - h + y
+        if self.__img__:
+            get_render_method().draw(self.__img__, x, y, w, h)
+        # utils.draw_image(self.__img__, x, y, w, h)
 
     def __clear_image__(self):
-        self.clear('X')
-        self.parent.refresh()
-        self.clear()
+        # self.clear('X')
+        # self.parent.refresh()
+        # self.clear()
+        x = self.relx
+        y = self.rely
+        w = self.width
+        h = self.height
+        if self.border:
+            x += 1
+            y += 1
+            w -= 2
+            h -= 2
+        if x < 0 or y < 0:
+            # _, _, ww, wh = get_window_size()
+            ww, wh = os.get_terminal_size()
+            if x < 0:
+                x = ww - w + x
+            if y < 0:
+                y = wh - h + y
+        get_render_method().clear(x, y, w, h)
 
     def update(self, clear=True):
         draw_border_with_title(self)
+        if self.hidden or not self.__img__:
+            self.__clear_image__()
+        else:
+            self.__draw_image__()
 
 
 class FormButton(nps.ButtonPress):
@@ -159,21 +196,20 @@ class FormButton(nps.ButtonPress):
             self.find_parent_app().switchForm(self.__form__)
 
 
-class AccountButton(FormButton):
-    def __init__(self, screen, account, form=None, *args, **keywords):
+class LoginButton(FormButton):
+    def __init__(self, screen,form=None, *args, **keywords):
         super().__init__(screen, form, *args, **keywords)
-        self.account = account
 
     def _pre_edit(self):
         super()._pre_edit()
-        self.parent.set_account(self.account)
+        self.parent.set_account(self.parent.get_account())
 
     def _post_edit(self):
         super()._post_edit()
         self.parent.set_account(None)
 
     def whenPressed(self):
-        if VK.login_by_token(self.account):
+        if VK.login_by_token(self.parent.get_account()):
             super().whenPressed()
 
 
@@ -212,31 +248,50 @@ class LoginForm(nps.ActionFormMinimal):
         self.accounts = self.add(AccountsBox, contained_widget_arguments={"slow_scroll": True}, rely=4, scroll_exit=True, width=57, max_width=-18, name=l10n.translate("box.form.LOGIN.accounts.title"))
         self.avatar = self.add(ImageWidget, rely=1, relx=-21, editable=False, name=l10n.translate("img.form.LOGIN.avatar.title"), border=True, width=20, height=10)
         self.login_as = self.add(nps.FixedText, rely=11, relx=-20, hidden=True, editable=False)
-        self.login = self.add(FormButton, rely=13, relx=-20, hidden=True, name=l10n.translate("button.form.LOGIN.login.title"))
+        self.login = self.add(LoginButton, rely=13, relx=-20, hidden=True, name=l10n.translate("button.form.LOGIN.login.title"))
+        self.__account__ = None
 
     def on_ok(self):
         self.parentApp.switchFormPrevious()
 
+    def get_account(self):
+        return self.__account__
+
     def set_account(self, account):
         if account:
+            self.__account__ = account
             avatar = VK.get_avatar(account["id"], size="large")
             self.avatar.set_img(avatar, True)
         else:
             self.avatar.set_img(None)
-        self.avatar.display()
+        self.avatar.update()
         self.login_as.value = account["name"] if account else None
         self.login_as.hidden = not self.login_as.value
-        self.login_as.display()
+        self.login_as.update()
         self.login.hidden = not self.login_as.value
-        self.login.display()
+        self.login.update()
 
 
 class AccountSelect(nps.SelectOne):
-    def h_select(self, ch):
-        super().h_select(ch)
-        index = self.cursor_line
-        account = SETTINGS.get_accounts()[index]
-        self.parent.set_account(account)
+    def update(self, clear=True):
+        super().update(clear)
+        self.update_account()
+
+    def find_selected(self):
+        # i = 0
+        # for line in self.values:
+        #     if line.value:
+        #         return i
+        #     else:
+        #         i += 1
+        return self.value[0] if self.value else -1
+
+    def update_account(self):
+        selected = self.find_selected()
+        if selected > -1:
+            self.parent.set_account(SETTINGS.get_accounts()[selected])
+        else:
+            self.parent.set_account(None)
 
 
 class AccountsBox(nps.BoxTitle):
@@ -245,6 +300,10 @@ class AccountsBox(nps.BoxTitle):
     def update(self, clear=True):
         self.entry_widget.values = list(map(lambda account: account["name"], SETTINGS.get_accounts()))
         super().update(clear)
+
+    def value_changed_callback(self, widget):
+        self.name = "Test"
+        self.parent.account = SETTINGS.get_accounts()[widget.value[0]]
 
     def reset(self):
         self.entry_widget.value = None
@@ -279,9 +338,6 @@ class LoginNewForm(nps.ActionForm):
 class ProfileForm(nps.ActionForm):
     def create(self):
         pass
-
-    def display(self, clear=True):
-        super().display(clear)
 
     def on_ok(self):
         self.parentApp.setNextForm(None)

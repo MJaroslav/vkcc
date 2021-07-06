@@ -63,6 +63,9 @@ class Settings(object):
     def get_w3mimgdisplay(self):
         return self.get_option("images.w3mimgdisplay")
 
+    def get_render_method(self):
+        return self.get_option("images.render_method")
+
     def get_images_offset(self):
         return self.get_option("images.offset.x", 0), self.get_option("images.offset.y", 0)
 

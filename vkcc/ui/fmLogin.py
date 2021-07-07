@@ -22,6 +22,7 @@ class LoginForm(nps.ActionFormMinimal):
                     self.parent.__accounts__.value = None
                     self.parent.__accounts__.update()
                     self.parent.set_account(None)
+                self.parent.display()
             else:
                 if VK.login_by_token(self.parent.get_account()):
                     super().whenPressed()

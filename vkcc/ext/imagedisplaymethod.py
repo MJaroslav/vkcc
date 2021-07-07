@@ -2,7 +2,6 @@ import termios
 import shlex
 import subprocess
 from builtins import Exception
-from turtle import update
 
 from vkcc.config import configuration
 import json
@@ -31,11 +30,15 @@ class ImageDisplayMethod(object):
     def dispose(self):
         pass
 
+    def clear_all(self):
+        pass
+
 
 class UeberzugMethod(ImageDisplayMethod):
     def __init__(self):
         self.is_initialized = False
         self.process = None
+        self.identifiers = []
 
     def initialize(self):
         try:
@@ -49,6 +52,7 @@ class UeberzugMethod(ImageDisplayMethod):
 
     def dispose(self):
         try:
+            self.clear_all()
             if self.is_initialized and self.process.poll() is None:
                 timer_killer = threading.Timer(1, self.process.kill, [])
                 try:
@@ -60,23 +64,34 @@ class UeberzugMethod(ImageDisplayMethod):
         except Exception as e:
             raise DrawException(e)
 
-    def __run_command__(self, **kwargs):
+    def __run_command__(self, action, identifier, **kwargs):
         try:
             self.initialize()
-            line = json.dumps(kwargs) + "\n"
+            command = kwargs.copy()
+            command.update({"action": action, "identifier": identifier})
+            line = json.dumps(command) + "\n"
             self.process.stdin.write(line)
             self.process.stdin.flush()
+            if action == "add":
+                if identifier not in self.identifiers:
+                    self.identifiers.append(identifier)
+            elif action == "remove":
+                if identifier in self.identifiers:
+                    self.identifiers.remove(identifier)
         except Exception as e:
             raise DrawException(e)
 
     def draw(self, img, x, y, width, height):
         identifier = "{}:{}:{}:{}".format(x, y, width, height)
-        self.__run_command__(action="add", identifier=identifier, x=x, y=y, width=width,
-                             height=height, path=img)
+        self.__run_command__("add", identifier, x=x, y=y, width=width, height=height, path=img)
 
     def clear(self, x, y, width, height):
         identifier = "{}:{}:{}:{}".format(x, y, width, height)
-        self.__run_command__(action="remove", identifier=identifier)
+        self.__run_command__("remove", identifier)
+
+    def clear_all(self):
+        for identifier in self.identifiers:
+            self.__run_command__("remove", identifier)
 
 
 class W3mimgdisplayMethod(ImageDisplayMethod):
@@ -194,6 +209,10 @@ class W3mimgdisplayMethod(ImageDisplayMethod):
             self.process.stdin.flush()
         except Exception as e:
             raise DrawException(e)
+
+    def clear_all(self):
+        w, h = os.get_terminal_size()
+        self.clear(0, 0, w, h)
 
 
 __CURRENT__ = None

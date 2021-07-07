@@ -1,5 +1,5 @@
 import npyscreen as nps
-import vkcc.ui.utilNotifyExtended
+from vkcc.ui.utilNotifyExtended import YesNoPopupTranslated
 from vkcc.config import translate
 from vkcc.ext import VK
 
@@ -30,8 +30,7 @@ class LoginNewForm(nps.ActionForm):
 
     @staticmethod
     def notify_auth_handler():
-        f = vkcc.ui.utilNotifyExtended.ConfirmCancelPopupTranslated(name=translate("popup.TWO_AUTH.title"),
-                                                                    color='STANDOUT')
+        f = YesNoPopupTranslated(name=translate("popup.TWO_AUTH.title"), color='STANDOUT')
         f.preserve_selected_widget = True
 
         code = f.add(nps.TitleText, name=translate("titletext.popup.TWO_AUTH.code.title"))

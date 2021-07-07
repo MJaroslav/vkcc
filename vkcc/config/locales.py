@@ -3,8 +3,11 @@ LOCALE_EN = {
     "form.LOGIN.title": "Select user or login",
     "form.LOGIN_NEW.title": "Login",
 
+    "popup.DEFAULT.title": "Message",
     "popup.TWO_AUTH.title": "Two auth required",
 
+    "button.yes.title": "Yes",
+    "button.no.title": "No",
     "button.exit.title": "Exit",
     "button.back.title": "Back",
     "button.cancel.title": "Cancel",
@@ -26,7 +29,9 @@ LOCALE_EN = {
     "img.form.LOGIN.avatar.title": "Login as",
     "img.error.title": "Error",
 
-    "box.form.LOGIN.accounts.title": "Select user"
+    "box.form.LOGIN.accounts.title": "Select user",
+
+    "text.sure.title": "You sure"
 }
 
 
@@ -35,8 +40,11 @@ LOCALE_RU = {
     "form.LOGIN.title": "Выберите пользователя или войдите",
     "form.LOGIN_NEW.title": "Вход",
 
+    "popup.DEFAULT.title": "Сообщение",
     "popup.TWO_AUTH.title": "Требуется двойная аутентификация",
 
+    "button.yes.title": "Да",
+    "button.no.title": "Нет",
     "button.exit.title": "Выйти",
     "button.back.title": "Назад",
     "button.cancel.title": "Отмена",
@@ -58,7 +66,9 @@ LOCALE_RU = {
     "img.form.LOGIN.avatar.title": "Войти как",
     "img.error.title": "Ошибка",
 
-    "box.form.LOGIN.accounts.title": "Выберете пользователя"
+    "box.form.LOGIN.accounts.title": "Выберете пользователя",
+
+    "text.sure.title": "Вы уверены"
 }
 
 LOCALES = {

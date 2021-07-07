@@ -33,8 +33,7 @@ class Image(nps.MultiLine):
             self.__image_changed_callback__()
 
     def image_changed(self):
-        self.update()
-        # self.parent.refresh()
+        self.display()
 
     def display(self):
         try:

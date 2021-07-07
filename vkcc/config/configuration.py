@@ -1,47 +1,32 @@
 import json
 import os
 
-DEFAULT_OPTIONS = {
-    "profiles": {
-        "mate-terminal": {
-            "images": {
-                "offset": {
-                    "x": 0,
-                    "y": 13
-                }
-            }
-        }
-    },
-    "profile": "",
+CONFIG_DIR = os.path.expanduser("~/.config/vkcc/")
+os.makedirs(CONFIG_DIR, exist_ok=True)
+
+CONFIG_FILE = os.path.join(CONFIG_DIR, "config.json")
+
+AUTH_FILE = os.path.join(CONFIG_DIR, "auth.json")
+
+DEFAULT_CONFIGURATION = {
     "language": "english",
-    "images": {
-        "w3mimgdisplay": "",
-        "offset": {
-            "x": 0,
-            "y": 0
-        }
-    },
     "accounts": []
 }
 
 
-class Settings(object):
+class Configuration(object):
     def __init__(self):
         self.__data__ = {}
-        self.__config_dir__ = os.path.expanduser("~/.config/")
-        if not os.path.exists(self.__config_dir__):
-            os.makedirs(self.__config_dir__)
-        self.__settings_file__ = self.__config_dir__ + "vkcc"
         self.__load__()
 
     def __load__(self):
-        if os.path.exists(self.__settings_file__):
-            with open(self.__settings_file__, "r") as file:
+        if os.path.exists(CONFIG_FILE):
+            with open(CONFIG_FILE, "r") as file:
                 self.__data__ = json.load(file)
         else:
-            with open(self.__settings_file__, "w") as file:
-                json.dump(DEFAULT_OPTIONS, file, indent=4)
-            self.__data__ = DEFAULT_OPTIONS
+            with open(CONFIG_FILE, "w") as file:
+                json.dump(DEFAULT_CONFIGURATION, file, indent=4)
+            self.__data__ = DEFAULT_CONFIGURATION
 
     def __get_option__(self, key, default=None):
         keys = key.split(".")
@@ -61,10 +46,10 @@ class Settings(object):
         return self.__get_option__("profiles.{}.{}".format(self.get_profile(), key), self.__get_option__(key, default))
 
     def get_w3mimgdisplay(self):
-        return self.get_option("images.w3mimgdisplay")
+        return self.get_option("images.render.w3mimgdisplay.path")
 
     def get_render_method(self):
-        return self.get_option("images.render_method")
+        return self.get_option("images.render.method")
 
     def get_images_offset(self):
         return self.get_option("images.offset.x", 0), self.get_option("images.offset.y", 0)
@@ -84,12 +69,19 @@ class Settings(object):
             "name": name,
             "access_token": token
         }
+        # Just reset list without arg account
+        self.__data__["accounts"] = [account for account in self.__data__["accounts"] if account["id"] != user_id]
         self.__data__["accounts"].append(account)
         self.save()
 
+    def remove_account(self, acc):
+        # Just reset list without arg account
+        self.__data__["accounts"] = [account for account in self.__data__["accounts"] if account["id"] != acc["id"]]
+        self.save()
+
     def save(self):
-        with open(self.__settings_file__, "w") as file:
+        with open(CONFIG_FILE, "w") as file:
             json.dump(self.__data__, file, indent=4)
 
 
-SETTINGS = Settings()
+configuration = Configuration()

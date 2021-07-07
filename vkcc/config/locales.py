@@ -1,5 +1,3 @@
-from vkcc.settings import SETTINGS
-
 LOCALE_EN = {
     "form.MAIN.title": "VK Console Client",
     "form.LOGIN.title": "Select user or login",
@@ -15,6 +13,7 @@ LOCALE_EN = {
     "button.form.MAIN.settings.title": "Settings",
     "button.form.LOGIN.login_new.title": "New user",
     "button.form.LOGIN.login.title": "Login",
+    "button.form.LOGIN.delete.title": "Delete",
 
     "titletext.form.LOGIN_NEW.login.title": "Login",
     "titletext.popup.TWO_AUTH.code.title": "Code",
@@ -25,7 +24,7 @@ LOCALE_EN = {
     "checkbox.popup.TWO_AUTH.remember.title": "Remember device",
 
     "img.form.LOGIN.avatar.title": "Login as",
-    "img.no.title": "Error",
+    "img.error.title": "Error",
 
     "box.form.LOGIN.accounts.title": "Select user"
 }
@@ -46,6 +45,7 @@ LOCALE_RU = {
     "button.form.MAIN.settings.title": "Настройки",
     "button.form.LOGIN.login_new.title": "Новый пользователь",
     "button.form.LOGIN.login.title": "Войти",
+    "button.form.LOGIN.delete.title": "Удалить",
 
     "titletext.form.LOGIN_NEW.login.title": "Логин",
     "titletext.popup.TWO_AUTH.code.title": "Код",
@@ -56,30 +56,13 @@ LOCALE_RU = {
     "checkbox.popup.TWO_AUTH.remember.title": "Запомнить устройство",
 
     "img.form.LOGIN.avatar.title": "Войти как",
-    "img.no.title": "Ошибка",
+    "img.error.title": "Ошибка",
 
     "box.form.LOGIN.accounts.title": "Выберете пользователя"
 }
+
 LOCALES = {
     "english": LOCALE_EN,
-    "russian": LOCALE_RU
+    "russian": LOCALE_RU,
+    "DEFAULT": LOCALE_EN
 }
-
-
-def __get_locale__():
-    lang = SETTINGS.get_language()
-    if lang in LOCALES:
-        return LOCALES[lang]
-    else:
-        return LOCALE_EN
-
-
-def translate(key, *args):
-    locale = __get_locale__()
-    if key in locale:
-        return locale[key].format(*args)
-    elif key in LOCALE_EN:
-        return LOCALE_EN[key].format(*args)
-    else:
-        return key + "@[{}]".format(", ".join(args))
-

@@ -2,6 +2,7 @@ import npyscreen as nps
 from vkcc.core import FORM_SETTINGS
 from vkcc.ext import update_render_method
 from vkcc.config import translate, configuration
+from vkcc.config.locales import LOCALES
 from vkcc.ui.utilNotifyExtended import notify_confirm_translated
 
 
@@ -47,7 +48,8 @@ class SettingsForm(nps.ActionFormMinimal):
         self.__profile__.value = current
         languages = configuration.allowed_languages()
         current = languages.index(configuration.get_language())
-        self.__language__.set_values(languages)
+        self.__language__.set_values(list(map(lambda language: LOCALES[language]["name"],
+                                              configuration.allowed_languages())))
         self.__language__.value = current
         renders = configuration.allowed_render_methods()
         current = renders.index(configuration.get_render_method())

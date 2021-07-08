@@ -15,13 +15,31 @@ class YesNoPopupTranslated(nps.utilNotify.YesNoPopup):
     CANCEL_BUTTON_BR_OFFSET = (2, 15)
 
 
+def notify_confirm_translated(message, title=translate("popup.DEFAULT.title"), form_color='STANDOUT', wrap=True, wide=False, editw=0,):
+    message = nps.utilNotify._prepare_message(translate(message))
+    if wide:
+        f = nps.PopupWide(name=title, color=form_color)
+    else:
+        f = nps.Popup(name=title, color=form_color)
+    f.preserve_selected_widget = True
+    mlw = f.add(nps.Pager, editable=False)
+    mlw_width = mlw.width-1
+    if wrap:
+        message = nps.utilNotify._wrap_message_lines(message, mlw_width)
+    else:
+        message = message.split("\n")
+    mlw.values = message
+    f.editw = editw
+    f.edit()
+
+
 def notify_ok_cancel_translated(message, title=translate("popup.DEFAULT.title"), form_color='STANDOUT', wrap=True,
                                 editw=0,):
     get_render_method().clear_all()
-    message = nps.utilNotify._prepare_message(message)
+    message = nps.utilNotify._prepare_message(translate(message))
     f = ConfirmCancelPopupTranslated(name=title, color=form_color)
     f.preserve_selected_widget = True
-    mlw = f.add(nps.Pager,)
+    mlw = f.add(nps.Pager, editable=False)
     mlw_width = mlw.width-1
     if wrap:
         message = nps.utilNotify._wrap_message_lines(message, mlw_width)
@@ -34,10 +52,10 @@ def notify_ok_cancel_translated(message, title=translate("popup.DEFAULT.title"),
 def notify_yes_no_translated(message, title=translate("popup.DEFAULT.title"), form_color='STANDOUT', wrap=True,
                                 editw=0,):
     get_render_method().clear_all()
-    message = nps.utilNotify._prepare_message(message)
+    message = nps.utilNotify._prepare_message(translate(message))
     f = YesNoPopupTranslated(name=title, color=form_color)
     f.preserve_selected_widget = True
-    mlw = f.add(nps.Pager,)
+    mlw = f.add(nps.Pager, editable=False)
     mlw_width = mlw.width-1
     if wrap:
         message = nps.utilNotify._wrap_message_lines(message, mlw_width)

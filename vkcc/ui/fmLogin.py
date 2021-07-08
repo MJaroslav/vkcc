@@ -1,5 +1,5 @@
 import npyscreen as nps
-from vkcc.config import translate, configuration
+from vkcc.config import translate, accounts
 import vkcc.core
 from vkcc.ui.wgformswitchbutton import FormSwitchButton
 from vkcc.ui.utilNotifyExtended import notify_yes_no_translated
@@ -17,8 +17,8 @@ class LoginForm(nps.ActionFormMinimal):
 
         def whenPressed(self):
             if self.__is_delete__:
-                if notify_yes_no_translated(translate("text.sure.title") + "?", editw=1):
-                    configuration.remove_account(self.parent.get_account())
+                if notify_yes_no_translated("text.sure.title", editw=1):
+                    accounts.remove(self.parent.get_account())
                     self.parent.__accounts__.value = None
                     self.parent.__accounts__.update()
                     self.parent.set_account(None)
@@ -42,18 +42,18 @@ class LoginForm(nps.ActionFormMinimal):
             def update_account(self):
                 selected = self.find_selected()
                 if selected > -1:
-                    self.parent.set_account(configuration.get_accounts()[selected])
+                    self.parent.set_account(accounts.get(selected))
                 else:
                     self.parent.set_account(None)
 
         _contained_widget = AccountSelect
 
         def update(self, clear=True):
-            self.entry_widget.values = list(map(lambda account: account["name"], configuration.get_accounts()))
+            self.entry_widget.values = list(map(lambda account: account["name"], accounts.get_all()))
             super().update(clear)
 
         def value_changed_callback(self, widget):
-            self.parent.account = configuration.get_accounts()[widget.value[0]]
+            self.parent.account = accounts.get(widget.value[0])
 
         def reset(self):
             self.entry_widget.value = None

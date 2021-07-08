@@ -1,7 +1,10 @@
 LOCALE_EN = {
+    "name": "English",
+
     "form.MAIN.title": "VK Console Client",
     "form.LOGIN.title": "Select user or login",
     "form.LOGIN_NEW.title": "Login",
+    "form.SETTINGS.title": "Settings",
 
     "popup.DEFAULT.title": "Message",
     "popup.TWO_AUTH.title": "Two auth required",
@@ -31,14 +34,21 @@ LOCALE_EN = {
 
     "box.form.LOGIN.accounts.title": "Select user",
 
-    "text.sure.title": "You sure"
+    "text.sure.title": "You sure?",
+    "text.restart.title": "If you changed something, you should to restart app",
+
+    "combo.form.SETTINGS.profile.title": "Settings profile",
+    "combo.form.SETTINGS.render.title": "Image render method"
 }
 
 
 LOCALE_RU = {
+    "name": "Русский",
+
     "form.MAIN.title": "Консольный клиент VK",
     "form.LOGIN.title": "Выберите пользователя или войдите",
     "form.LOGIN_NEW.title": "Вход",
+    "form.SETTINGS.title": "Настройки",
 
     "popup.DEFAULT.title": "Сообщение",
     "popup.TWO_AUTH.title": "Требуется двойная аутентификация",
@@ -68,7 +78,11 @@ LOCALE_RU = {
 
     "box.form.LOGIN.accounts.title": "Выберете пользователя",
 
-    "text.sure.title": "Вы уверены"
+    "text.sure.title": "Вы уверены?",
+    "text.restart.title": "Если вы что-то изменили, то вам нужно перезапустить приложение",
+
+    "combo.form.SETTINGS.profile.title": "Профиль настроек",
+    "combo.form.SETTINGS.render.title": "Способ отрисовки картинок"
 }
 
 LOCALES = {

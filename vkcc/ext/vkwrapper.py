@@ -1,5 +1,5 @@
 from vk_api import VkApi
-from vkcc.config import configuration
+from vkcc.config import accounts
 from vkcc.config.configuration import CONFIG_DIR
 import shutil
 import os
@@ -54,7 +54,7 @@ class VKWrapper(object):
             self.__user_id__ = self.__user__["id"]
             self.__user_name__ = self.__user__["first_name"] + " " + self.__user__["last_name"]
             if save:
-                configuration.add_account(self.__user_id__, self.__user_name__, self.__session__.token["access_token"])
+                accounts.add(self.__user_id__, self.__user_name__, self.__session__.token["access_token"])
                 self.get_avatar(self.__user_id__, "large", True)
                 return {
                     "name": self.__user_name__,

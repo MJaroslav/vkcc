@@ -1,2 +1,2 @@
-from .configuration import configuration
+from .configuration import accounts, configuration
 from vkcc.config.localization import translate

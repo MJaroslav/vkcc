@@ -1,9 +1,9 @@
 from vkcc.core import *
-
 import npyscreen as nps
 from vkcc.ui.fmMain import MainForm
 from vkcc.ui.fmLogin import LoginForm
 from vkcc.ui.fmLoginNew import LoginNewForm
+from vkcc.ui.fmSettings import SettingsForm
 import vkcc.ext
 
 
@@ -13,6 +13,7 @@ class VKCCApp(nps.StandardApp):
         self.addForm(FORM_MAIN, MainForm)
         self.addForm(FORM_LOGIN, LoginForm)
         self.addForm(FORM_LOGIN_NEW, LoginNewForm)
+        self.addForm(FORM_SETTINGS, SettingsForm)
 
     def onCleanExit(self):
         vkcc.ext.get_render_method().dispose()

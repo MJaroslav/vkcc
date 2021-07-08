@@ -1,10 +1,11 @@
 import npyscreen as nps
 from vkcc.config import translate, accounts
-import vkcc.core
+from vkcc.core import FORM_VK_FEED, FORM_LOGIN_NEW, FORM_MAIN
 from vkcc.ui.wgformswitchbutton import FormSwitchButton
 from vkcc.ui.utilNotifyExtended import notify_yes_no_translated
 from vkcc.ui.wgimage import ImageBoxed
 from vkcc.ext import VK
+from vkcc.ext.vkwrapper import SIZE_AVATAR_LARGE
 
 
 class LoginForm(nps.ActionFormMinimal):
@@ -78,7 +79,7 @@ class LoginForm(nps.ActionFormMinimal):
         self.set_account(None)
 
     def create(self):
-        self.add(FormSwitchButton, form=vkcc.core.FORM_LOGIN_NEW,
+        self.add(FormSwitchButton, form=FORM_LOGIN_NEW,
                  name=translate("button.form.LOGIN.login_new.title"))
         self.__accounts__ = self.add(self.AccountsBox, contained_widget_arguments={"slow_scroll": True}, rely=4,
                                      scroll_exit=True, width=-23, max_width=-18,
@@ -86,11 +87,11 @@ class LoginForm(nps.ActionFormMinimal):
         self.__avatar__ = self.add(ImageBoxed, rely=1, relx=-21, name=translate("img.form.LOGIN.avatar.title"),
                                    width=20, height=10)
         self.__login_as__ = self.add(nps.FixedText, rely=11, relx=-20, editable=False)
-        self.__login__ = self.add(self.LoginButton, rely=13, relx=-20, hidden=True)
+        self.__login__ = self.add(self.LoginButton, form=FORM_VK_FEED, rely=13, relx=-20, hidden=True)
         self.__delete_account__ = self.add(self.LoginButton, is_delete=True, rely=14, relx=-20, hidden=True)
 
     def on_ok(self):
-        self.parentApp.switchFormPrevious()
+        self.parentApp.switchForm(FORM_MAIN)
 
     def get_account(self):
         return self.__account__
@@ -98,7 +99,7 @@ class LoginForm(nps.ActionFormMinimal):
     def set_account(self, account):
         if account:
             self.__account__ = account
-            avatar = VK.get_avatar(account["id"], size="large")
+            avatar = VK.get_avatar(account["id"], size=SIZE_AVATAR_LARGE)
             self.__avatar__.set_image(avatar)
         else:
             self.__avatar__.set_image(None)

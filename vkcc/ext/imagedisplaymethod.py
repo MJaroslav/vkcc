@@ -83,7 +83,7 @@ class UeberzugMethod(ImageDisplayMethod):
 
     def draw(self, img, x, y, width, height):
         identifier = "{}:{}:{}:{}".format(x, y, width, height)
-        self.__run_command__("add", identifier, x=x, y=y, width=width, height=height, path=img)
+        self.__run_command__("add", identifier, x=x, y=y, width=width, height=height, path=img, scaler="forced_cover")
 
     def clear(self, x, y, width, height):
         identifier = "{}:{}:{}:{}".format(x, y, width, height)

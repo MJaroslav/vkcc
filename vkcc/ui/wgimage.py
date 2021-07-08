@@ -11,7 +11,7 @@ class Image(nps.MultiLine):
         super().__init__(screen, *args, **keywords)
         self._image_ = image
         self.hide_if_none = hide_if_none
-        self._is_editable = False
+        self.editable = False
         self.__draw_error_callback__ = keywords["draw_error_callback"] if "draw_error_callback" in keywords else None
         self.__image_changed_callback__ = keywords["image_changed_callback"] if "image_changed_callback" in keywords \
             else self.image_changed
@@ -55,9 +55,9 @@ class Image(nps.MultiLine):
         if x < 0 or y < 0:
             ww, wh = os.get_terminal_size()
             if x < 0:
-                x = ww - w + x
+                x = ww - w + x + 1
             if y < 0:
-                y = wh - h + y
+                y = wh - h + y + 1
         renderer().draw(self._image_, x, y, w, h)
 
     def clear(self, usechar=' '):
@@ -68,9 +68,9 @@ class Image(nps.MultiLine):
         if x < 0 or y < 0:
             ww, wh = os.get_terminal_size()
             if x < 0:
-                x = ww - w + x
+                x = ww - w + x + 1
             if y < 0:
-                y = wh - h + y
+                y = wh - h + y + 1
         renderer().clear(x, y, w, h)
 
     def resize(self):
@@ -92,11 +92,12 @@ class ImageBoxed(nps.BoxTitle):
         self.update()
 
     def draw_error_callback(self, error):
-        self.footer = l10n.translate("img.error.title")
+        # self.footer = l10n.translate("text.error.title")
+        pass  # TODO: Make log warn
 
-    def update(self, clear=True):
-        self.footer = None
-        super().update(clear)
+    # def update(self, clear=True):
+    #     self.footer = None
+    #     super().update(clear)
 
     def when_resized(self):
         self.entry_widget.height = self.height - 2

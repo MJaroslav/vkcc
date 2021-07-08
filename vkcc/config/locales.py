@@ -5,6 +5,8 @@ LOCALE_EN = {
     "form.LOGIN.title": "Select user or login",
     "form.LOGIN_NEW.title": "Login",
     "form.SETTINGS.title": "Settings",
+    "form.FEED.title": "Feed",
+    "form.MESSAGES.title": "Messages",
 
     "popup.DEFAULT.title": "Message",
     "popup.TWO_AUTH.title": "Two auth required",
@@ -20,6 +22,10 @@ LOCALE_EN = {
     "button.form.LOGIN.login_new.title": "New user",
     "button.form.LOGIN.login.title": "Login",
     "button.form.LOGIN.delete.title": "Delete",
+    "button.form.VK.feed.title": "Feed",
+    "button.form.VK.messages.title": "Messages",
+    "button.form.VK.friends.title": "Friends",
+    "button.form.VK.groups.title": "Groups",
 
     "titletext.form.LOGIN_NEW.login.title": "Login",
     "titletext.popup.TWO_AUTH.code.title": "Code",
@@ -30,10 +36,10 @@ LOCALE_EN = {
     "checkbox.popup.TWO_AUTH.remember.title": "Remember device",
 
     "img.form.LOGIN.avatar.title": "Login as",
-    "img.error.title": "Error",
 
     "box.form.LOGIN.accounts.title": "Select user",
 
+    "text.error.title": "Error",
     "text.sure.title": "You sure?",
     "text.restart.title": "If you changed something, you should to restart app",
 
@@ -49,6 +55,8 @@ LOCALE_RU = {
     "form.LOGIN.title": "Выберите пользователя или войдите",
     "form.LOGIN_NEW.title": "Вход",
     "form.SETTINGS.title": "Настройки",
+    "form.FEED.title": "Новости",
+    "form.MESSAGES.title": "Сообщения",
 
     "popup.DEFAULT.title": "Сообщение",
     "popup.TWO_AUTH.title": "Требуется двойная аутентификация",
@@ -64,6 +72,10 @@ LOCALE_RU = {
     "button.form.LOGIN.login_new.title": "Новый пользователь",
     "button.form.LOGIN.login.title": "Войти",
     "button.form.LOGIN.delete.title": "Удалить",
+    "button.form.VK.feed.title": "Новости",
+    "button.form.VK.messages.title": "Сообщения",
+    "button.form.VK.friends.title": "Друзья",
+    "button.form.VK.groups.title": "Группы",
 
     "titletext.form.LOGIN_NEW.login.title": "Логин",
     "titletext.popup.TWO_AUTH.code.title": "Код",
@@ -74,17 +86,16 @@ LOCALE_RU = {
     "checkbox.popup.TWO_AUTH.remember.title": "Запомнить устройство",
 
     "img.form.LOGIN.avatar.title": "Войти как",
-    "img.error.title": "Ошибка",
 
     "box.form.LOGIN.accounts.title": "Выберете пользователя",
 
+    "text.error.title": "Ошибка",
     "text.sure.title": "Вы уверены?",
     "text.restart.title": "Если вы что-то изменили, то вам нужно перезапустить приложение",
 
     "combo.form.SETTINGS.profile.title": "Профиль настроек",
     "combo.form.SETTINGS.render.title": "Способ отрисовки картинок"
 }
-
 LOCALES = {
     "english": LOCALE_EN,
     "russian": LOCALE_RU,
